@@ -1,8 +1,10 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def analyzer():
-    return 'Welcome to page_analyzer'
+    return render_template(
+            'index.html',
+            )
