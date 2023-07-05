@@ -15,6 +15,33 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 DATABASE_URL = os.getenv('DATABASE_URL')
 conn = psycopg2.connect(DATABASE_URL)
 
+
+def get_checks_id():
+    with conn.cursor() as curs:
+        curs.execute("SELECT id FROM url_checks;")
+        checks_id = curs.fetchall()
+    return checks_id
+
+
+def get_checks(id_):
+    with conn.cursor() as curs:
+        curs.execute(f"SELECT * FROM url_checks WHERE url_id = '{id_}' ORDER BY id DESC;")
+        need_checks = curs.fetchall()
+        return need_checks
+
+
+def making_check(id_):
+    new_date = datetime.date.today()
+    checks_id = get_checks_id()
+    if checks_id == []:
+        new_id = 1
+    else:
+        for ids in checks_id:
+            new_id = max(ids) + 1
+    with conn.cursor() as curs:
+        curs.execute(f"INSERT INTO url_checks (id, url_id, created_at) VALUES ('{new_id}', '{id_}', '{new_date}');")
+        curs.execute(f"UPDATE all_urls SET check_date = '{new_date}' WHERE id = '{id_}';")
+
 def get_id():
     with conn.cursor() as curs:
         curs.execute("SELECT id FROM urls;")
@@ -33,20 +60,18 @@ def get_url(id_):
     with conn.cursor() as curs:
         curs.execute(f"SELECT * FROM urls WHERE id = '{id_}';")
         need_url = curs.fetchone()
-        print(f'needurl is {need_url}')
         return need_url
 
 
 def get_all_urls():
     with conn.cursor() as curs:
-        curs.execute(f"SELECT * FROM all_urls;")
+        curs.execute(f"SELECT * FROM all_urls ORDER BY id DESC;")
         getted_urls = curs.fetchall()
         return getted_urls
 
 
 def url_db_add(cutted_url):
     new_date = datetime.datetime.today()
-    print(f'new date is {new_date}')
     all_ids = get_id()
     if all_ids == []:
         new_id = 1
@@ -99,14 +124,19 @@ def urls_post():
 @app.get('/urls')
 def urls_get():
     all_urls = get_all_urls()
-    reversed_urls = []
-    for i in reversed(all_urls):
-        reversed_urls.append(i)
-    return render_template('all_pages.html', all_urls=reversed_urls)
+    return render_template('all_pages.html', all_urls=all_urls)
 
 
 @app.route('/urls/<id>')
 def add_url(id):
     messages = get_flashed_messages(with_categories=True)
     cur_url = get_url(id)
-    return render_template('page.html', messages=messages, urls=cur_url)
+    cur_checks = get_checks(id)
+    return render_template('page.html', messages=messages, urls=cur_url, checks=cur_checks)
+
+
+@app.post('/urls/<id>/checks')
+def check_url(id):
+    flash('Страница успешно проверена', 'success')
+    making_check(id)
+    return redirect(url_for('add_url', id=id))
