@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from urllib.parse import urlparse
 import validators
 import datetime
+import requests
 
 
 load_dotenv()
@@ -30,7 +31,7 @@ def get_checks(id_):
         return need_checks
 
 
-def making_check(id_):
+def making_check(id_, answer):
     new_date = datetime.date.today()
     checks_id = get_checks_id()
     if checks_id == []:
@@ -39,8 +40,8 @@ def making_check(id_):
         for ids in checks_id:
             new_id = max(ids) + 1
     with conn.cursor() as curs:
-        curs.execute(f"INSERT INTO url_checks (id, url_id, created_at) VALUES ('{new_id}', '{id_}', '{new_date}');")
-        curs.execute(f"UPDATE all_urls SET check_date = '{new_date}' WHERE id = '{id_}';")
+        curs.execute(f"INSERT INTO url_checks (id, url_id, status_code, created_at) VALUES ('{new_id}', '{id_}', '{answer}', '{new_date}');")
+        curs.execute(f"UPDATE all_urls SET check_date = '{new_date}', answer = '{answer}' WHERE id = '{id_}';")
 
 def get_id():
     with conn.cursor() as curs:
@@ -137,6 +138,12 @@ def add_url(id):
 
 @app.post('/urls/<id>/checks')
 def check_url(id):
+    cur_url = get_url(id)
+    req = requests.get(cur_url[1])
+    status_code = req.status_code
+    if status_code != 200:
+        flash('Произошла ошибка при проверке', 'error')
+        return redirect(url_for('add_url', id=id))
     flash('Страница успешно проверена', 'success')
-    making_check(id)
+    making_check(id, status_code)
     return redirect(url_for('add_url', id=id))
