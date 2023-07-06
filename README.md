@@ -6,5 +6,3 @@
 
 [![CI check](https://github.com/MisterFlicker/python-project-83/actions/workflows/main.yml/badge.svg)](https://github.com/MisterFlicker/python-project-83/actions/workflows/main.yml)
 
-
-https://python-project-83-production-9773.up.railway.app/
