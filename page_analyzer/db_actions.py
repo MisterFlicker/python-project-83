@@ -37,12 +37,15 @@ def making_check(id_, answer, h1, title, description):
 
     with conn.cursor() as curs:
 
-        curs.execute(f"""INSERT INTO url_checks (id, url_id, status_code, h1, title, description, created_at)
-                VALUES ('{new_id}', '{id_}', '{answer}', '{h1}', '{title}', '{description}', '{new_date}');""")
+        curs.execute(f"""INSERT INTO url_checks (id, url_id, status_code,
+        h1, title, description, created_at)
+        VALUES ('{new_id}', '{id_}', '{answer}',
+        '{h1}', '{title}', '{description}', '{new_date}');""")
 
         curs.execute(f"""UPDATE all_urls
-                SET check_date = '{new_date}', answer = '{answer}'
-                WHERE id = '{id_}';""")
+        SET check_date = '{new_date}', answer = '{answer}'
+        WHERE id = '{id_}';""")
+
 
 def get_id():
     with conn.cursor() as curs:
@@ -67,7 +70,7 @@ def get_url(id_):
 
 def get_all_urls():
     with conn.cursor() as curs:
-        curs.execute(f"SELECT * FROM all_urls ORDER BY id DESC;")
+        curs.execute("SELECT * FROM all_urls ORDER BY id DESC;")
         getted_urls = curs.fetchall()
     return getted_urls
 

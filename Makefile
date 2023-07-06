@@ -14,7 +14,7 @@ package-install: # установка пакета в систему
 	python3 -m pip install --user dist/*.whl
 
 lint: # проверка gendiff по линтеру flake8
-	poetry run flake8 gendiff
+	poetry run flake8 page_analyzer
 
 test: # проверка gendiff по pytest
 	poetry run pytest

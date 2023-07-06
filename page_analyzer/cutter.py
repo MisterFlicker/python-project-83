@@ -1,6 +1,7 @@
 import validators
 from urllib.parse import urlparse
 
+
 def cutting_url(address):
     if validators.url(address) and len(address) <= 255:
         x = urlparse(address)

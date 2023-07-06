@@ -1,10 +1,16 @@
-from flask import Flask, render_template, request, flash, get_flashed_messages, redirect, url_for
+from flask import (
+        Flask, render_template, request, flash,
+        get_flashed_messages, redirect, url_for
+        )
 import os
 from dotenv import load_dotenv
 import requests
 from page_analyzer.parser import parsing
 from page_analyzer.cutter import cutting_url
-from page_analyzer.db_actions import get_checks_id, get_checks, making_check, get_id, url_db, get_url, get_all_urls, url_db_add
+from page_analyzer.db_actions import (
+        get_checks, making_check, url_db,
+        get_url, get_all_urls, url_db_add
+        )
 
 
 load_dotenv()
@@ -32,14 +38,18 @@ def urls_post():
                 flash('Страница уже существует', 'info')
                 id_ = i[0]
                 return redirect(url_for('add_url', id=id_))
-        
+
         new_note = url_db_add(cutted_url)
         flash('Страница успешно добавлена', 'success')
         return redirect(url_for('add_url', id=new_note[0]))
 
     flash('Некорректный URL', 'error')
-    messages=get_flashed_messages(with_categories=True)
-    return render_template('index.html', incorrect_url=address, messages=messages)
+    messages = get_flashed_messages(with_categories=True)
+    return render_template(
+            'index.html',
+            incorrect_url=address,
+            messages=messages
+            )
 
 
 @app.get('/urls')
@@ -53,7 +63,12 @@ def add_url(id):
     messages = get_flashed_messages(with_categories=True)
     cur_url = get_url(id)
     cur_checks = get_checks(id)
-    return render_template('page.html', messages=messages, urls=cur_url, checks=cur_checks)
+    return render_template(
+            'page.html',
+            messages=messages,
+            urls=cur_url,
+            checks=cur_checks
+            )
 
 
 @app.post('/urls/<id>/checks')

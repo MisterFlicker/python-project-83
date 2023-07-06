@@ -12,5 +12,7 @@ def parsing(url):
     if soup.title:
         parsed_url['title'] = soup.title.string.strip()
     if soup.find(attrs={'name': 'description'}):
-        parsed_url['description'] = soup.find(attrs={'name': 'description'})['content'].strip()
+        parsed_url['description'] = (
+                soup.find(attrs={'name': 'description'})['content'].strip()
+                )
     return parsed_url
