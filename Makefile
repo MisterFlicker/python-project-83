@@ -13,17 +13,11 @@ package-install-f: # установка пакета в систему (по ф�
 package-install: # установка пакета в систему
 	python3 -m pip install --user dist/*.whl
 
-lint: # проверка gendiff по линтеру flake8
+lint: # проверка по линтеру flake8
 	poetry run flake8 page_analyzer
-
-test: # проверка gendiff по pytest
-	poetry run pytest
 
 selfcheck:
 	poetry check
-
-test-coverage: # проверка по покрытию теста
-	poetry run pytest --cov=gendiff --cov-report xml tests/
 
 run: #старт
 	poetry run flask --app page_analyzer:app run
