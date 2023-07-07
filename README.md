@@ -3,7 +3,7 @@
 
 ## How to use
 
-You need to make table in database - to do this, execute the code for creating tables specified in the root file **database.sql**.
+You need to make three tables in database - to do this, execute the code for creating tables specified in the root file **database.sql**.
 
 Also you need to create an .env file in the root of the project, and write your environment variables there.  
 ```
