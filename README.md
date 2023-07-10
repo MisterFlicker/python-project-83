@@ -27,3 +27,5 @@ SECRET_KEY = 'any character set for secret key'
 
 After installing dependencies (root file **Makefile** can help with this) run command:  
 `make run`
+
+Deployed app: https://page-analyzer-00jp.onrender.com/
