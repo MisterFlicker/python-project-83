@@ -1,7 +1,19 @@
 ## Codeclimate status:
 <a href="https://codeclimate.com/github/MisterFlicker/python-project-83/maintainability"><img src="https://api.codeclimate.com/v1/badges/46d6d0a63eea8c47fd64/maintainability" /></a>
 
+## Description
+
+Page Analyzer is a site that analyzes specified pages for SEO suitability similar to PageSpeed Insights.
+
 ## How to use
+
+git@github.com:MisterFlicker/python-project-83.git
+
+To install use: make install
+
+To build use: make build
+
+To package install use: make package-install
 
 You need to make three tables in database - to do this, execute the code for creating tables specified in the root file **database.sql**.
 
